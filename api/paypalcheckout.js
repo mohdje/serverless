@@ -1,6 +1,24 @@
 const paypalBaseApi = "https://api-m.sandbox.paypal.com";
 
-export default async (req, res) => {
+const allowCors = fn => async (req, res) => {
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    console.log("request origin", req.headers.origin)
+    // another common pattern
+    // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    )
+    if (req.method === 'OPTIONS') {
+        res.status(200).end()
+        return
+    }
+    return await fn(req, res)
+}
+
+async function handler(req, res) {
     if (req.method !== "POST")
         sendErrorResponse(res, "Method not allowed");
 
@@ -75,3 +93,7 @@ async function generateAccessToken() {
         return null;
     }
 };
+
+
+module.exports = allowCors(handler)
+
