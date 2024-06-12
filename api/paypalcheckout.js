@@ -1,9 +1,11 @@
 const paypalBaseApi = "https://api-m.sandbox.paypal.com";
+const tokenApiUrl = `${paypalBaseApi}/v1/oauth2/token`;
+const ordersUrl = `${paypalBaseApi}/v2/checkout/orders`;
 
 const allowCors = fn => async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', true)
     res.setHeader('Access-Control-Allow-Origin', '*')
-    console.log("request origin", req.headers.origin)
+
     // another common pattern
     // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
@@ -40,9 +42,7 @@ async function handler(req, res) {
             },
         ],
     };
-    const url = `${paypalBaseApi}/v2/checkout/orders`;
-
-    const response = await fetch(url, {
+    const response = await fetch(ordersUrl, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
@@ -80,19 +80,17 @@ async function generateAccessToken() {
             return null;
         }
         const auth = Buffer.from(clientId + ":" + clientSecret).toString('base64');
-        console.log("auth", auth)
-        console.log("fetch", fetch)
-        const response = await fetch(`${base}/v1/oauth2/token`, {
+        const response = await fetch(tokenApiUrl, {
             method: "POST",
             body: "grant_type=client_credentials",
             headers: {
                 Authorization: `Basic ${auth}`,
             },
         });
-        console.log("response", response)
         const data = await response.json();
         return data.access_token;
     } catch (error) {
+        console.error("error", error)
         return null;
     }
 };
