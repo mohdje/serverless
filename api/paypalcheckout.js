@@ -81,6 +81,7 @@ async function generateAccessToken() {
         }
         const auth = Buffer.from(clientId + ":" + clientSecret).toString('base64');
         console.log("auth", auth)
+        console.log("fetch", fetch)
         const response = await fetch(`${base}/v1/oauth2/token`, {
             method: "POST",
             body: "grant_type=client_credentials",
@@ -88,6 +89,7 @@ async function generateAccessToken() {
                 Authorization: `Basic ${auth}`,
             },
         });
+        console.log("response", response)
         const data = await response.json();
         return data.access_token;
     } catch (error) {
