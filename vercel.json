@@ -1,7 +1,7 @@
 {
     "headers": [
         {
-            "source": "/api/paypalcheckout",
+            "source": "/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
@@ -13,7 +13,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
-                    "value": "OPTIONS,POST"
+                    "value": "OPTIONS,GET,POST"
                 },
                 {
                     "key": "Access-Control-Allow-Headers",

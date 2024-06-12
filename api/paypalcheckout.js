@@ -1,9 +1,7 @@
 const paypalBaseApi = "https://api-m.sandbox.paypal.com";
 
 export default async (req, res) => {
-    if (req.method === "OPTIONS")
-        return;
-    else if (req.method !== "POST")
+    if (req.method !== "POST")
         sendErrorResponse(res, "Method not allowed");
 
 
