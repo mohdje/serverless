@@ -79,7 +79,8 @@ async function generateAccessToken() {
         if (!clientId || !clientSecret) {
             return null;
         }
-        const auth = btoa(clientId + ":" + clientSecret);
+        const auth = Buffer.from(clientId + ":" + clientSecret).toString('base64');
+        console.log("auth", auth)
         const response = await fetch(`${base}/v1/oauth2/token`, {
             method: "POST",
             body: "grant_type=client_credentials",
