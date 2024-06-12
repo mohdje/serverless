@@ -3,12 +3,12 @@ const paypalBaseApi = "https://api-m.sandbox.paypal.com";
 export default async (req, res) => {
 
     if (req.method !== 'POST')
-        sendErrorResponse("Method not allowed");
+        sendErrorResponse(res, "Method not allowed");
 
     const accessToken = await generateAccessToken();
 
     if (!accessToken)
-        sendErrorResponse("Payment authentication failed");
+        sendErrorResponse(res, "Payment authentication failed");
 
     const { body } = req;
     const payload = {
@@ -43,11 +43,11 @@ export default async (req, res) => {
         const order = await response.json();
         res.status(200).send({ orderId: order.id });
     } catch (err) {
-        sendErrorResponse("Order creation failed");
+        sendErrorResponse(res, "Order creation failed");
     }
 };
 
-function sendErrorResponse(message) {
+function sendErrorResponse(res, message) {
     res.status(500).send({
         error: message
     });
