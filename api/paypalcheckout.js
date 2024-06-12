@@ -1,6 +1,6 @@
 const paypalBaseApi = "https://api-m.sandbox.paypal.com";
 
-export default handleRequest = async (req, res) => {
+export default async (req, res) => {
 
     if (req.method !== 'POST')
         sendErrorResponse("Method not allowed");
